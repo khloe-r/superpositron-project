@@ -2,13 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext.js";
 import { Link, useHistory } from "react-router-dom";
 
-import firebase from "../firebase";
-
-export default function SignUp() {
+export default function Login() {
   const emailRef = useRef();
-  const passwordConfirmRef = useRef();
   const passwordRef = useRef();
-  const { signup } = useAuth();
+  const { login } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -18,14 +15,10 @@ export default function SignUp() {
     const email = emailRef.current.value;
     const pw = passwordRef.current.value;
 
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Passwords do not match");
-    }
-
     try {
       setError("");
       setLoading(true);
-      await signup(email, pw);
+      await login(email, pw);
       console.log("yay");
       history.push("/dashboard");
     } catch {
@@ -37,7 +30,7 @@ export default function SignUp() {
 
   return (
     <>
-      <h1>Sign Up</h1>
+      <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <label>
           email:
@@ -47,11 +40,7 @@ export default function SignUp() {
           password:
           <input type="password" ref={passwordRef}></input>
         </label>
-        <label>
-          confirm password:
-          <input type="password" ref={passwordConfirmRef}></input>
-        </label>
-        <button type="submit">Sign Up</button>
+        <button type="submit">Log In</button>
       </form>
     </>
   );
