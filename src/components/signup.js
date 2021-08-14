@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext.js";
-import { Link, useHistory } from "react-router-dom";
-
-import firebase from "../firebase";
+import { useHistory } from "react-router-dom";
+import { TextField } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import "./form.css";
 
 export default function SignUp() {
   const emailRef = useRef();
@@ -12,6 +13,8 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+
+  console.log(history);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -38,21 +41,20 @@ export default function SignUp() {
   return (
     <>
       <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          email:
-          <input type="text" ref={emailRef}></input>
-        </label>
-        <label>
-          password:
-          <input type="password" ref={passwordRef}></input>
-        </label>
-        <label>
-          confirm password:
-          <input type="password" ref={passwordConfirmRef}></input>
-        </label>
-        <button type="submit">Sign Up</button>
-      </form>
+      <div className="form">
+        <form onSubmit={handleSubmit}>
+          <div>
+            <TextField id="outlined-basic" label="Email:" variant="filled" ref={emailRef} />
+          </div>
+          <div>
+            <TextField id="outlined-basic" label="Password" variant="filled" ref={passwordRef} />
+          </div>
+          <div>
+            <TextField id="outlined-basic" label="Comfirm password:" variant="filled" ref={passwordConfirmRef} />
+          </div>
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
     </>
   );
 }

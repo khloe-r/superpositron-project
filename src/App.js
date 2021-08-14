@@ -13,9 +13,10 @@ import SignUp from "./components/signup";
 import Awards from "./components/awards";
 import Login from "./components/login";
 import Landing from "./components/landing";
-import Navbar from "./components/navbar";
+import Navbar from "./components/navbar/navbar";
 import PrivateRoute from "./PrivateRoute";
-
+import BubbleProfile from "./components/bubbleprofile";
+import Bubbles from "./components/bubbles";
 function App() {
   return (
     <>
@@ -30,6 +31,8 @@ function App() {
                 <Route exact path="/log-in" component={Login} />
                 <Route exact path="/" component={Landing} />
                 <PrivateRoute exact path="/awards" component={Awards} />
+                <PrivateRoute exact path="/bubble-profile" component={BubbleProfile} />
+                <PrivateRoute exact path="/bubbles" component={Bubbles} />
                 <PrivateRoute exact path="/create-bubble" component={CreateBubble} />
                 <PrivateRoute exact path="/user-profile" component={UserProfile} />
                 <Route path="*" component={ErrorPage} />

@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import firebase from "../firebase";
 import { useAuth } from "../contexts/AuthContext.js";
+import { Link } from "react-router-dom";
 
 import CreateBubble from "./createbubble";
-import CreateGoal from "./creategoal";
+import BubbleProfile from "./bubbleprofile";
 
 export default function Dashboard() {
   const userRef = firebase.firestore().collection("users");
   const bubbleRef = firebase.firestore().collection("bubbles");
   const nameRef = useRef();
+  const bubbleNameRef = useRef();
   const { currentUser, setDisplayName } = useAuth();
 
   const [user, setUser] = useState();
@@ -31,7 +33,7 @@ export default function Dashboard() {
         }
       })
       .then(() => {
-        console.log("Done");
+        console.log("loaded dashboard");
       });
     setLoading(false);
   }
@@ -43,6 +45,7 @@ export default function Dashboard() {
 
   function returnToDash() {
     console.log("returning");
+    getUser();
     setAdding(false);
   }
 
@@ -59,8 +62,8 @@ export default function Dashboard() {
         name: nameRef.current.value,
         email: currentUser.email,
         bubbles: [],
-        goals: [],
         awards: [],
+        goalsComplete: 0,
       })
       .then(() => {
         setDisplayName(nameRef.current.value);
@@ -82,7 +85,7 @@ export default function Dashboard() {
     return (
       <>
         <h1>add ur goal</h1>
-        <CreateGoal />
+        {/* <CreateGoalUser userID={currentUser.uid} /> */}
         <button onClick={returnToDash}>return to dashboard</button>
       </>
     );
@@ -91,11 +94,11 @@ export default function Dashboard() {
   if (unknown) {
     return (
       <>
-        <h1>Please enter your name!</h1>{" "}
+        <h1>Welcome! Let's learn more about you!</h1>{" "}
         <form onSubmit={handleName}>
           <label>
-            name:
-            <input type="text" ref={nameRef}></input>
+            Enter your name:
+            <input type="text" ref={nameRef} required />
           </label>
           <button type="submit">Continue</button>
         </form>
@@ -106,18 +109,25 @@ export default function Dashboard() {
   return (
     <>
       <h1>Hello {currentUser.displayName}</h1>
+      <h5>My Bubbles</h5>
       <div className="flex-contain">
-        {user?.goals.map((goal) => {
-          return (
-            <div>
-              <h2>{goal.name}</h2>
-              <p>
-                Completed {goal.progress} {goal.type} out of {goal.number}
-              </p>
-            </div>
-          );
-        })}
-        <button onClick={addGoal}>Add New Goal</button>
+        {user?.bubbles.length > 0 ? (
+          user?.bubbles.map((bubble) => {
+            return (
+              <div>
+                <BubbleProfile bubbleID={bubble.id} />
+              </div>
+            );
+          })
+        ) : (
+          <>
+            <p>You don't have any bubbles!</p>
+            <Link to="create-bubble">
+              <button>Start your first one here!</button>
+            </Link>
+          </>
+        )}
+        {user?.bubbles.length > 0 && <button onClick={addGoal}>Add New Goal</button>}
       </div>
     </>
   );
