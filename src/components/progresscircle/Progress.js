@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./Progress.css";
+import "./ProgressCircle.css";
 import ProgressCircle from "./ProgressCircle";
 
 const Progress = ({ progress, total }) => {
@@ -8,7 +8,7 @@ const Progress = ({ progress, total }) => {
     <div className="app">
       <div className="app-header">
         <h1>Progress</h1>
-        <ProgressCircle total={total} progress={progress} size={500} strokeWidth={15} circleOneStroke="#d9edfe" circleTwoStroke={color} />
+        <ProgressCircle total={total} progress={progress} size={300} strokeWidth={15} circleOneStroke="#d9edfe" circleTwoStroke="#5BC4FF" />
       </div>
     </div>
   );

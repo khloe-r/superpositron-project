@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import firebase from "firebase/app";
 import { useAuth } from "../contexts/AuthContext.js";
+import { Link } from "react-router-dom";
 
 import CreateGoal from "./creategoal";
 
@@ -11,8 +12,12 @@ const CreateBubble = () => {
   const [loading, setLoading] = useState(false);
 
   const bubbleNameRef = useRef();
+  const categoryRef = useRef();
 
   const [bubbled, setBubbled] = useState(false);
+
+  const categories = ["Health and Fitness", "Personal", "Social", "Educational", "Career and Finance"];
+
   const [bID, setBID] = useState(false);
 
   async function createBubble() {
@@ -29,7 +34,7 @@ const CreateBubble = () => {
             .doc(bubid)
             .set({
               name: bubbleNameRef.current.value,
-              tags: [],
+              category: categoryRef.current.value,
               goals: [],
               users: [currentUser.uid],
             })
@@ -60,15 +65,27 @@ const CreateBubble = () => {
 
   return (
     <div>
-      <h1>First create a bubble!</h1>
+      <h1>Name your bubble!</h1>
       <p>(You can be the only one in your bubble if you wish!)</p>
       <form onSubmit={handleSubmit}>
         <label>
           Bubble Name:
-          <input type="text" ref={bubbleNameRef}></input>
+          <input type="text" ref={bubbleNameRef} required></input>
+        </label>
+        <label>
+          {" "}
+          select a category
+          <select id="category" ref={categoryRef}>
+            {categories.map((c) => {
+              return <option value={c}>{c}</option>;
+            })}
+          </select>
         </label>
         <button type="submit">Add Bubble</button>
       </form>
+      <Link to="dashboard">
+        <button>Cancel</button>
+      </Link>
     </div>
   );
 };

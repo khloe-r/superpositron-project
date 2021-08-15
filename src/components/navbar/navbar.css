@@ -1,7 +1,8 @@
-.topnav ul {
-  list-style: none;
+ul {
+  border-radius: 100px;
+  list-style-type: none;
   margin: 0;
-  padding: 10;
+  padding: 0;
   overflow: hidden;
   background-color: #283254;
 }
@@ -12,15 +13,20 @@ li {
 
 li a {
   display: block;
+  padding: 14px 62.9px;
   color: #ffffff;
   text-align: center;
-  padding: 12px 61px;
   font-size: 14px;
   font-family: "Helvetica";
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
 }
 
-li a:hover {
+a:hover {
   background-color: #141b31;
+}
+
+img {
+  width: 42%;
+  height: auto;
 }

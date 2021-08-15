@@ -22,8 +22,8 @@ function App() {
     <>
       <Router>
         <AuthProvider>
-          <Navbar />
           <div className="App">
+            <Navbar />
             <header className="App-header">
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />

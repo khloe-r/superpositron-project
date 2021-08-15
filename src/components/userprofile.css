@@ -1,0 +1,28 @@
+.userprofile {
+  font-family: "Helvetica";
+}
+
+.profile-panel {
+  background-color: #f8f8f8;
+  border-radius: 20px;
+  color: #141927;
+  font-weight: bold;
+  margin: 25px 50px;
+}
+
+.account-panel {
+  background-color: #f8f8f8;
+  border-radius: 20px;
+  color: #141927;
+  font-weight: bold;
+}
+/*
+<Grid item xs={4} className="profile-panel">
+          <h1>{currentUser.displayName}</h1>
+          <p>Goals in Progress: </p>
+          <p>Goals completed: </p>
+          <p>Bubbles joined: </p>
+          <Link to="create-bubble">
+            <button>Add New Bubble</button>
+          </Link>
+*/

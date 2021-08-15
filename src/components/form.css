@@ -1,13 +1,12 @@
 .form {
   display: flex;
+  margin-top: 2em;
   margin-left: auto;
   margin-right: auto;
-  justify-content: center;
-  height: 400px;
-  width: 400px;
+  padding: 50px;
+  flex-direction: column;
   align-items: center;
-  position: relative;
-  border-radius: 0.25rem;
-  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3);
-  background-color: whitesmoke;
+  position: absolute;
+  border-radius: 100px;
+  background-color: #283254;
 }

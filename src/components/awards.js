@@ -10,22 +10,25 @@ const Awards = () => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
 
+  const goalMilestones = [1, 5, 10, 15, 20, 25, 50, 100];
+  const bubbleMilestones = [1, 3, 5, 10, 15, 20];
+
   function getAwards() {
-    setLoading(true);
-    console.log("getting");
-    userRef
-      .doc(currentUser.uid)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          console.log(doc.data());
-          setUser(doc.data());
-        }
-      })
-      .then(() => {
-        console.log("Done");
-      });
-    setLoading(false);
+    // setLoading(true);
+    // console.log("getting");
+    // userRef
+    //   .doc(currentUser.uid)
+    //   .get()
+    //   .then((doc) => {
+    //     if (doc.exists) {
+    //       console.log(doc.data());
+    //       setUser(doc.data());
+    //     }
+    //   })
+    //   .then(() => {
+    //     console.log("Done");
+    //   });
+    // setLoading(false);
   }
 
   useEffect(() => {

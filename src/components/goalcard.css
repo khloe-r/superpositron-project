@@ -1,0 +1,22 @@
+.goalcard {
+  padding: 25px;
+  margin-bottom: 30px;
+  border-radius: 25px;
+  background-color: #283254;
+  cursor: pointer;
+}
+
+.timer {
+  background-color: #c082ff;
+  width: 500px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.timer h1 {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 7rem;
+  color: 000000;
+}

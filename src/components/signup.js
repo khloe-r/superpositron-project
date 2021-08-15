@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext.js";
 import { useHistory } from "react-router-dom";
-import { TextField } from "@material-ui/core";
+import { TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import "./form.css";
 
@@ -40,19 +40,21 @@ export default function SignUp() {
 
   return (
     <>
-      <h1>Sign Up</h1>
       <div className="form">
+        <h1>Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <div>
-            <TextField id="outlined-basic" label="Email:" variant="filled" ref={emailRef} />
+            <TextField style={{ backgroundColor: "white", borderRadius: 10, width: 300, margin: 10 }} label="Email:" variant="filled" inputRef={emailRef} />
           </div>
           <div>
-            <TextField id="outlined-basic" label="Password" variant="filled" ref={passwordRef} />
+            <TextField style={{ backgroundColor: "white", borderRadius: 10, width: 300, margin: 10 }} label="Password" type="password" variant="filled" inputRef={passwordRef} />
           </div>
           <div>
-            <TextField id="outlined-basic" label="Comfirm password:" variant="filled" ref={passwordConfirmRef} />
+            <TextField style={{ backgroundColor: "white", borderRadius: 10, width: 300, margin: 10 }} label="Comfirm password:" type="password" variant="filled" inputRef={passwordConfirmRef} />
           </div>
-          <button type="submit">Sign Up</button>
+          <Button variant="contained" style={{ backgroundColor: "#4A567C", width: 150, color: "white", margin: 20, borderRadius: 10 }} type="submit">
+            Sign Up
+          </Button>
         </form>
       </div>
     </>

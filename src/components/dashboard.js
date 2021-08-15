@@ -2,9 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import firebase from "../firebase";
 import { useAuth } from "../contexts/AuthContext.js";
 import { Link } from "react-router-dom";
+import "./form.css";
+import { TextField, Button, Input } from "@material-ui/core";
 
-import CreateBubble from "./createbubble";
+import CreateGoal from "./creategoal";
 import BubbleProfile from "./bubbleprofile";
+import GoalCard from "./goalcard-";
 
 export default function Dashboard() {
   const userRef = firebase.firestore().collection("users");
@@ -15,10 +18,12 @@ export default function Dashboard() {
 
   const [user, setUser] = useState();
   const [unknown, setUnknown] = useState(false);
+  const [goalList, setGoalList] = useState([]);
   const [adding, setAdding] = useState(false);
   const [loading, setLoading] = useState(false);
 
   function getUser() {
+    let goals = [];
     setLoading(true);
     userRef
       .doc(currentUser.uid)
@@ -26,14 +31,31 @@ export default function Dashboard() {
       .then((doc) => {
         if (doc.exists) {
           setUnknown(false);
-          console.log(doc.data());
           setUser(doc.data());
         } else {
           setUnknown(true);
         }
       })
       .then(() => {
+        bubbleRef.onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            if (doc.data().users.includes(currentUser.uid)) {
+              console.log(doc.data().goals);
+              goals = goals.concat(
+                doc.data().goals.map((goal) => ({
+                  goal: goal,
+                  bubble: doc.data().name, //doc.id
+                }))
+              );
+              setGoalList(goals);
+            }
+          });
+        });
+      })
+      .then(() => {
         console.log("loaded dashboard");
+        console.log(goals);
+        setGoalList(goals);
       });
     setLoading(false);
   }
@@ -84,38 +106,51 @@ export default function Dashboard() {
   if (adding) {
     return (
       <>
-        <h1>add ur goal</h1>
-        {/* <CreateGoalUser userID={currentUser.uid} /> */}
-        <button onClick={returnToDash}>return to dashboard</button>
+        <h1>Add your Goal!</h1>
+        <CreateGoal />
+        <Button onClick={returnToDash}>return to dashboard</Button>
       </>
     );
   }
 
   if (unknown) {
     return (
-      <>
+      <div className="form">
         <h1>Welcome! Let's learn more about you!</h1>{" "}
         <form onSubmit={handleName}>
-          <label>
-            Enter your name:
-            <input type="text" ref={nameRef} required />
-          </label>
-          <button type="submit">Continue</button>
+          <div>
+            <TextField style={{ backgroundColor: "white", borderRadius: 10, width: 300, margin: 10 }} label="What's your name?" variant="filled" inputRef={nameRef} />
+          </div>
+          <Button variant="contained" style={{ backgroundColor: "#4A567C", width: 150, color: "white", margin: 20, borderRadius: 10 }} type="submit">
+            Continue
+          </Button>
         </form>
-      </>
+      </div>
     );
   }
 
-  return (
+  return !currentUser ? null : (
     <>
-      <h1>Hello {currentUser.displayName}</h1>
-      <h5>My Bubbles</h5>
+      <div>
+        <h1>Hello {currentUser.displayName}!</h1>
+        {user?.bubbles.length > 0 && (
+          <>
+            <Button onClick={addGoal} variant="contained" style={{ backgroundColor: "#4A567C", width: 150, color: "white", margin: 20, borderRadius: 10 }}>
+              Add <br /> New Goal
+            </Button>
+            <Button component={Link} to="create-bubble" variant="contained" style={{ backgroundColor: "#4A567C", width: 150, color: "white", margin: 20, borderRadius: 10 }}>
+              Add New Bubble
+            </Button>{" "}
+          </>
+        )}
+      </div>
+      <h5>My Goals</h5>
       <div className="flex-contain">
-        {user?.bubbles.length > 0 ? (
-          user?.bubbles.map((bubble) => {
+        {user?.bubbles?.length > 0 ? (
+          goalList.map((goal) => {
             return (
               <div>
-                <BubbleProfile bubbleID={bubble.id} />
+                <GoalCard goal={goal.goal} bubble={goal.bubble} />
               </div>
             );
           })
@@ -123,11 +158,10 @@ export default function Dashboard() {
           <>
             <p>You don't have any bubbles!</p>
             <Link to="create-bubble">
-              <button>Start your first one here!</button>
+              <Button>Start your first one here!</Button>
             </Link>
           </>
         )}
-        {user?.bubbles.length > 0 && <button onClick={addGoal}>Add New Goal</button>}
       </div>
     </>
   );

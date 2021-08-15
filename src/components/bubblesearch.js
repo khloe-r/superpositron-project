@@ -1,4 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { TextField, Button } from "@material-ui/core";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import SearchIcon from "@material-ui/icons/Search";
 import firebase from "../firebase";
 import BubbleProfile from "./bubbleprofile.js";
 
@@ -7,6 +10,8 @@ const BubbleSearch = () => {
   const bubbleRef = firebase.firestore().collection("bubbles");
   const [results, setResults] = useState([]);
 
+  const categories = ["Health and Fitness", "Personal", "Social", "Educational", "Career and Finance"];
+
   async function handleSearch(e) {
     const answers = [];
     e.preventDefault();
@@ -14,25 +19,71 @@ const BubbleSearch = () => {
     await bubbleRef.onSnapshot((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const title = doc.data().name;
+        console.log(title);
         if (title.toLowerCase().includes(searchTerm.toLowerCase())) {
-          console.log(title);
-          answers.push(doc.data());
+          answers.push(doc.id);
         }
       });
+      setResults([]);
+      setResults(answers);
+    });
+    console.log(results);
+  }
+
+  function handleClick(e) {
+    e.preventDefault();
+    console.log(e.target.id);
+    searchButton(e.target.id);
+  }
+
+  function searchButton(category) {
+    console.log(category);
+    const answers = [];
+    bubbleRef.onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const cats = doc.data().category;
+        if (cats === category) {
+          answers.push(doc.id);
+        }
+      });
+      setResults([]);
       setResults(answers);
     });
     console.log(results);
   }
 
   return (
-    <div>
+    <div style={{ postion: "static" }}>
       <form onSubmit={handleSearch}>
-        <label>
-          Search for Bubbles: <input type="text" ref={bubbleSearchRef}></input>
-        </label>
-        <button type="submit">Search</button>
+        <div>
+          <TextField
+            style={{ backgroundColor: "white", borderRadius: 10, width: 600, margin: 10 }}
+            // InputProps={{
+            //   startAdornment: (
+            //     <InputAdornment position="start">
+            //       <SearchIcon />
+            //     </InputAdornment>
+            //   ),
+            // }}
+            label="Looking to join one? Search for Bubbles by name:"
+            variant="filled"
+            inputRef={bubbleSearchRef}
+          />
+          <Button variant="contained" style={{ backgroundColor: "#4A567C", width: 150, color: "white", margin: 20, borderRadius: 10 }} type="submit">
+            Search
+          </Button>
+        </div>
+        <br />
+        {categories.map((cat) => {
+          //double check
+          return (
+            <Button id={cat} variant="contained" style={{ backgroundColor: "#4A567C", width: 150, color: "white", margin: 20, borderRadius: 10 }} onClick={handleClick}>
+              {cat}
+            </Button>
+          );
+        })}
         {results.map((result) => {
-          return <BubbleProfile bubbleData={result} />;
+          return <BubbleProfile bubbleID={result} />;
         })}
       </form>
     </div>
