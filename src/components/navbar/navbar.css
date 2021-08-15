@@ -1,20 +1,10 @@
-.navbar ul {
-  display: table;
-  text-align: center;
-  align-items: center;
+.navbar {
   border-radius: 100px;
-  list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
   background-color: #283254;
 }
-
-.navbar li {
-  float: left;
-  width: 356px;
-}
-
 .navbar a {
   display: block;
   padding: 14px 62.9px;
