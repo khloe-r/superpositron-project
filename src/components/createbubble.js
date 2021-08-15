@@ -1,15 +1,19 @@
 import React, { useRef, useState } from "react";
 import firebase from "firebase/app";
 import { useAuth } from "../contexts/AuthContext.js";
-import { Link } from "react-router-dom";
+
+import { Link, useHistory } from "react-router-dom";
+import { Button, TextField, MenuItem } from "@material-ui/core";
 
 import CreateGoal from "./creategoal";
+import "./createbubble.css";
 
 const CreateBubble = () => {
   const bubbleRef = firebase.firestore().collection("bubbles");
   const userRef = firebase.firestore().collection("users");
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   const bubbleNameRef = useRef();
   const categoryRef = useRef();
@@ -47,8 +51,9 @@ const CreateBubble = () => {
               });
             })
             .then(() => {
-              setBubbled(bubid);
+              //setBubbled(bubid);
               console.log("complete!");
+              history.push("/dashboard");
             });
         }
       });
@@ -64,28 +69,34 @@ const CreateBubble = () => {
   }
 
   return (
-    <div>
-      <h1>Name your bubble!</h1>
+    <div className="bubble-form-header">
+      <h3>Create your bubble!</h3>
       <p>(You can be the only one in your bubble if you wish!)</p>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Bubble Name:
-          <input type="text" ref={bubbleNameRef} required></input>
-        </label>
-        <label>
-          {" "}
-          select a category
-          <select id="category" ref={categoryRef}>
-            {categories.map((c) => {
-              return <option value={c}>{c}</option>;
-            })}
-          </select>
-        </label>
-        <button type="submit">Add Bubble</button>
-      </form>
-      <Link to="dashboard">
-        <button>Cancel</button>
-      </Link>
+      <div className="bubble-form">
+        <form onSubmit={handleSubmit}>
+          <div align="center">
+            <TextField style={{ backgroundColor: "white", borderRadius: 10, width: 400, margin: 10 }} label="Bubble Name:" variant="filled" inputRef={bubbleNameRef} />
+          </div>
+          <div align="center">
+            <TextField style={{ backgroundColor: "white", borderRadius: 10, width: 400, margin: 10 }} label="Select a category:" variant="filled" select inputRef={categoryRef}>
+              <MenuItem value="" disabled>
+                Select a category:
+              </MenuItem>
+              {categories?.map((c) => {
+                return <MenuItem value={c}>{c}</MenuItem>;
+              })}
+            </TextField>
+          </div>
+          <div align="center">
+            <Button variant="contained" style={{ backgroundColor: "#AD68F2", width: 150, color: "white", margin: 10, borderRadius: 10 }} type="submit">
+              Add Bubble
+            </Button>
+            <Button component={Link} to="/dashboard" variant="contained" style={{ backgroundColor: "#AD68F2", width: 130, color: "white", margin: 10, marginBottom: 10, borderRadius: 10 }}>
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

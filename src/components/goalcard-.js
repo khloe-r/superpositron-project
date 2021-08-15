@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import Progress from "./progresscircle/Progress";
 import { Dialog, Button, DialogTitle, DialogContent, DialogContentText, TextField } from "@material-ui/core";
 //import CountDownTimer from "./timer/CountDownTimer";
+import firebase from "firebase/app";
+import { useAuth } from "../contexts/AuthContext.js";
+
 import "./goalcard.css";
 
 const GoalCard = (goal, bubble) => {
@@ -10,9 +13,48 @@ const GoalCard = (goal, bubble) => {
   const [start, setStart] = useState(false);
   const [done, setDone] = useState(false);
   const progressRef = useRef();
+  const { currentUser } = useAuth();
 
-  function timerOver() {
-    setDone(true);
+  const userRef = firebase.firestore().collection("users");
+  const bubbleRef = firebase.firestore().collection("bubbles");
+
+  const bubbleColours = { "Health and Fitness": "#61B13C", Personal: "#5BC4FF", Social: "#C082FF", Educational: "#FFB13C", "Career and Finance": "#5451FF" };
+
+  function logProgress(progress) {
+    console.log(progress, "progress");
+    const prog = isNaN(progress) || progress === "" || progress === " " ? 0 : progress;
+    bubbleRef
+      .doc(goal.bubble.id)
+      .update({
+        [`goals`]: firebase.firestore.FieldValue.arrayRemove({
+          name: goal.goal.name,
+          number: goal.goal.number,
+          progress: goal.goal.progress,
+          type: goal.goal.type,
+        }),
+      })
+      .then(() => {
+        if (parseInt(prog) + parseInt(goal.goal.progress) >= goal.goal.number) {
+          console.log("done!");
+          userRef.doc(currentUser.uid).update({
+            goalsComplete: firebase.firestore.FieldValue.increment(1),
+          });
+        } else {
+          bubbleRef.doc(goal.bubble.id).update({
+            [`goals`]: firebase.firestore.FieldValue.arrayUnion({
+              name: goal.goal.name,
+              number: goal.goal.number,
+              progress: parseInt(prog) + parseInt(goal.goal.progress),
+              type: goal.goal.type,
+            }),
+          });
+        }
+      })
+      .then(() => {
+        console.log("logged progress");
+        window.location.reload();
+        // return false;
+      });
   }
 
   function CountDownTimer() {
@@ -34,10 +76,6 @@ const GoalCard = (goal, bubble) => {
       }
     };
 
-    const reset = () => {
-      setTime([parseInt(minutes), parseInt(seconds)]);
-    };
-
     useEffect(() => {
       timeID = setInterval(() => tick(), 5); //CHANGE BACK TO 1000
       return () => {
@@ -56,12 +94,17 @@ const GoalCard = (goal, bubble) => {
 
   return (
     <div>
-      <div class="goalcard" onClick={() => setOpen(true)}>
+      <div
+        class="goalcard"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
         <h2>{goal.goal.name}</h2>
         <h4>
           Completed {goal.goal.progress} out of {goal.goal.number} {goal.goal.type}
         </h4>
-        <p>{`From Bubble: ${goal.bubble}`}</p>
+        <p style={{ backgroundColor: bubbleColours[goal?.bubble.category], padding: 7, borderRadius: 20 }}>{`Bubble: ${goal.bubble.name}`}</p>
       </div>
       <Dialog open={open} onClose={() => setOpen(false)} style={{ borderRadius: 75 }}>
         {start ? (
@@ -71,8 +114,7 @@ const GoalCard = (goal, bubble) => {
                 <CountDownTimer />
                 <Button
                   onClick={() => {
-                    setStart(false);
-                    setDone(false);
+                    setDone(true);
                   }}
                 >
                   Stop the timer
@@ -84,7 +126,10 @@ const GoalCard = (goal, bubble) => {
                   <h1>Fragment Complete!</h1>
                 </DialogTitle>
                 <DialogContent>
-                  <DialogContentText>You completed 5 minutes of {goal.goal.name}</DialogContentText>
+                  <DialogContentText>
+                    Nice work on your goal: {goal.goal.name}! <br />
+                    You're almost there on your way to completing {goal.goal.number} {goal.goal.type}!
+                  </DialogContentText>
                 </DialogContent>
                 <Button
                   onClick={() => {
@@ -100,6 +145,7 @@ const GoalCard = (goal, bubble) => {
                     setOpen(false);
                     setDone(false);
                     setStart(false);
+                    logProgress(progressRef.current.value);
                   }}
                   color="primary"
                 >

@@ -1,4 +1,5 @@
 import React from "react";
+import { Paper, Grid } from "@material-ui/core";
 import firebase from "firebase/app";
 import { Link } from "react-router-dom";
 import "./navbar.css";
@@ -16,43 +17,68 @@ const Navbar = () => {
 
   return (
     <>
-      {currentUser ? (
-        <div className="topnav">
-          <ul>
-            <li>
-              <a>
-                <PersonIcon fontSize="large" />
-                <Link to="user-profile">User Profile</Link>
-              </a>
-            </li>
-
-            <li>
-              <a>
-                <BubbleChartIcon fontSize="large" />
-                <Link to="bubbles">Bubbles</Link>
-              </a>
-            </li>
-
-            <li>
+      {
+        currentUser ? (
+          <div className="navbar">
+            {/* <Grid className="navbar" container>
+            <Grid item xs={3}>
               <a>
                 <HomeIcon fontSize="large" />
                 <Link to="dashboard">Dashboard</Link>
               </a>
-            </li>
-
-            <li>
+            </Grid>
+            <Grid item xs={3}>
+              <a>
+                <BubbleChartIcon fontSize="large" />
+                <Link to="bubbles">Bubbles</Link>
+              </a>
+            </Grid>
+            <Grid item xs={3}>
               <a>
                 <BeenhereIcon fontSize="large" />
                 <Link to="/awards">Awards</Link>
               </a>
-            </li>
-          </ul>
-        </div>
-      ) : null
-      // not logged in navbar
-      // <div>
-      //   <img src={logo} alt="Logo" />
-      // </div>
+            </Grid>
+            <Grid item xs={3}>
+              <a>
+                <PersonIcon fontSize="large" />
+                <Link to="user-profile">User Profile</Link>
+              </a>
+            </Grid> */}
+
+            <ul>
+              <li>
+                <a>
+                  <HomeIcon fontSize="large" />
+                  <Link to="dashboard">Dashboard</Link>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <BubbleChartIcon fontSize="large" />
+                  <Link to="bubbles">Bubbles</Link>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <BeenhereIcon fontSize="large" />
+                  <Link to="/awards">Awards</Link>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <PersonIcon fontSize="large" />
+                  <Link to="user-profile">User Profile</Link>
+                </a>
+              </li>
+            </ul>
+          </div>
+        ) : // </Grid>
+        null
+        // not logged in navbar
+        // <div>
+        //   <img src={logo} alt="Logo" />
+        // </div>
       }
     </>
   );

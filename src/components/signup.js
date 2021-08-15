@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext.js";
-import { useHistory } from "react-router-dom";
-import { TextField, Button } from "@material-ui/core";
+import { useHistory, Link } from "react-router-dom";
+import { TextField, Button, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import "./form.css";
 
@@ -56,6 +56,9 @@ export default function SignUp() {
             Sign Up
           </Button>
         </form>
+        <Link to="/log-in" style={{ color: "white", textDecoration: "none", fontSize: 15 }}>
+          Already have an account? <span style={{ textDecoration: "underline" }}>Log In</span>
+        </Link>
       </div>
     </>
   );

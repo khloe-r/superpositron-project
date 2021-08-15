@@ -16,17 +16,19 @@ const BubbleSearch = () => {
     const answers = [];
     e.preventDefault();
     const searchTerm = bubbleSearchRef.current.value;
-    await bubbleRef.onSnapshot((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const title = doc.data().name;
-        console.log(title);
-        if (title.toLowerCase().includes(searchTerm.toLowerCase())) {
-          answers.push(doc.id);
-        }
+    if (searchTerm !== "") {
+      await bubbleRef.onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const title = doc.data().name;
+          console.log(title);
+          if (title.toLowerCase().includes(searchTerm.toLowerCase())) {
+            answers.push(doc.id);
+          }
+        });
+        setResults([]);
+        setResults(answers);
       });
-      setResults([]);
-      setResults(answers);
-    });
+    }
     console.log(results);
   }
 
@@ -82,6 +84,8 @@ const BubbleSearch = () => {
             </Button>
           );
         })}
+        <h4>Search Results</h4>
+        {results.length === 0 && <p>Use an option above to find more bubbles!</p>}
         {results.map((result) => {
           return <BubbleProfile bubbleID={result} />;
         })}

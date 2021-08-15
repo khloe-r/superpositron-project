@@ -4,3 +4,10 @@
   border-radius: 100px;
   background-color: #283254;
 }
+
+.goaltiles {
+  background-color: #c082ff;
+  padding: 15px 20px;
+  margin: 0 20px;
+  border-radius: 20px;
+}

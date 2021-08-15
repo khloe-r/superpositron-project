@@ -1,0 +1,17 @@
+.awardbox {
+  background-color: #febd06;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+}
+.goalbox {
+  background-color: #c082ff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+}
+
+.cols > * {
+  margin: 30px;
+  width: 50%;
+}

@@ -1,28 +1,35 @@
-.userprofile {
-  font-family: "Helvetica";
+.row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .profile-panel {
+  width: 20%;
+  height: 70%;
   background-color: #f8f8f8;
   border-radius: 20px;
   color: #141927;
-  font-weight: bold;
-  margin: 25px 50px;
+  margin: 100px 25px;
 }
 
 .account-panel {
-  background-color: #f8f8f8;
-  border-radius: 20px;
+  width: 40%;
+  background-color: #5bc4ff;
+  border-radius: 30px;
   color: #141927;
   font-weight: bold;
+  margin: 50px 50px;
 }
-/*
-<Grid item xs={4} className="profile-panel">
-          <h1>{currentUser.displayName}</h1>
-          <p>Goals in Progress: </p>
-          <p>Goals completed: </p>
-          <p>Bubbles joined: </p>
-          <Link to="create-bubble">
-            <button>Add New Bubble</button>
-          </Link>
-*/
+
+.inner-panel {
+  background-color: #f8f8f8;
+  text-align: left;
+  padding: 10px 25px;
+  border-radius: 0 0 30px 30px;
+}
+
+.text {
+  font-size: 12px;
+}

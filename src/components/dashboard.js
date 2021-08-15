@@ -42,9 +42,9 @@ export default function Dashboard() {
             if (doc.data().users.includes(currentUser.uid)) {
               console.log(doc.data().goals);
               goals = goals.concat(
-                doc.data().goals.map((goal) => ({
+                doc.data().goals.map((goal, index) => ({
                   goal: goal,
-                  bubble: doc.data().name, //doc.id
+                  bubble: { name: doc.data().name, id: doc.id, index: index, category: doc.data().category },
                 }))
               );
               setGoalList(goals);
@@ -84,7 +84,6 @@ export default function Dashboard() {
         name: nameRef.current.value,
         email: currentUser.email,
         bubbles: [],
-        awards: [],
         goalsComplete: 0,
       })
       .then(() => {
@@ -108,7 +107,9 @@ export default function Dashboard() {
       <>
         <h1>Add your Goal!</h1>
         <CreateGoal />
-        <Button onClick={returnToDash}>return to dashboard</Button>
+        <Button onClick={returnToDash} style={{ color: "white" }}>
+          return to dashboard
+        </Button>
       </>
     );
   }
@@ -136,10 +137,10 @@ export default function Dashboard() {
         {user?.bubbles.length > 0 && (
           <>
             <Button onClick={addGoal} variant="contained" style={{ backgroundColor: "#4A567C", width: 150, color: "white", margin: 20, borderRadius: 10 }}>
-              Add <br /> New Goal
+              Create <br /> New Goal
             </Button>
             <Button component={Link} to="create-bubble" variant="contained" style={{ backgroundColor: "#4A567C", width: 150, color: "white", margin: 20, borderRadius: 10 }}>
-              Add New Bubble
+              Create New Bubble
             </Button>{" "}
           </>
         )}
@@ -157,11 +158,12 @@ export default function Dashboard() {
         ) : (
           <>
             <p>You don't have any bubbles!</p>
-            <Link to="create-bubble">
-              <Button>Start your first one here!</Button>
-            </Link>
+            <Button style={{ color: "white", backgroundColor: "#c082ff", borderRadius: 15, padding: 10 }} component={Link} to="create-bubble">
+              Start your first one here!
+            </Button>
           </>
         )}
+        {goalList.length === 0 && <p>Use the buttons above to add new goals for your bubbles!</p>}
       </div>
     </>
   );

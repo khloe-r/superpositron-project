@@ -45,6 +45,9 @@ export default function Login() {
           Log In
         </Button>
       </form>
+      <Link to="/sign-up" style={{ color: "white", textDecoration: "none", fontSize: 15 }}>
+        Need an account? <span style={{ textDecoration: "underline" }}>Sign Up</span>
+      </Link>
     </div>
   );
 }

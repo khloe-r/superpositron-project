@@ -1,0 +1,16 @@
+.bubble-form-header {
+  margin-bottom: 10px;
+}
+
+.bubble-form {
+  text-align: left;
+  background-color: #c082ff;
+  border-radius: 20px;
+  padding: 20px;
+  line-height: 2;
+}
+
+.bubble-form label {
+  display: block;
+  font-family: Helvetica;
+}

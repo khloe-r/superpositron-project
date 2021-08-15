@@ -6,6 +6,7 @@ import { Button } from "@material-ui/core";
 
 import { useAuth } from "../contexts/AuthContext.js";
 import "./bubbleprofile.css";
+import { ImportantDevicesRounded } from "@material-ui/icons";
 
 const BubbleProfile = (bubbleID) => {
   const history = useHistory();
@@ -53,6 +54,19 @@ const BubbleProfile = (bubbleID) => {
       <p>Number of Goals: {bubbleData?.goals.length}</p>
       <p>Number of Users: {bubbleData?.users.length}</p>
       <p>Category: {bubbleData?.category}</p>
+      <div className="row">
+        {bubbleData?.goals.map((goal) => {
+          return (
+            <div className="goaltiles">
+              <span style={{ fontSize: 20, fontWeight: "bold", paddingBottom: 0 }}>{goal.name}</span>
+              <br />
+              <span style={{ fontSize: 15 }}>
+                {goal.progress} out of {goal.number} {goal.type}
+              </span>
+            </div>
+          );
+        })}
+      </div>
       {bubbleData?.users.includes(currentUser.uid) ? (
         <Button variant="contained" style={{ backgroundColor: "#61B13C", width: 700, color: "white", margin: 20, borderRadius: 10 }} onClick={() => history.push("/dashboard")}>
           Joined! Go to dashboard and work on the goals with your Bubblemates!

@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useForkRef, TextField, Button, MenuItem, FormControl, Select, FormHelperText, InputLabel } from "@material-ui/core";
 import firebase from "firebase/app";
 import { useAuth } from "../contexts/AuthContext.js";
 import { useHistory } from "react-router-dom";
-import { useForkRef } from "@material-ui/core";
+import "./form.css";
 
 //bubble: a bubbleRef from the parent component
 const CreateGoal = (bubbleId) => {
@@ -14,11 +15,13 @@ const CreateGoal = (bubbleId) => {
   const goalTypeRef = useRef();
   const numberRef = useRef();
   const [loading, setLoading] = useState(false);
+  const [bubblecat, setBubblecat] = useState();
   const history = useHistory();
 
   console.log(Object.keys(bubbleId).length === 0);
 
   const [bubbles, setBubbles] = useState();
+  // const [bubbleIdRef, setBubbleIdRef] = useState();
 
   const categories = ["Health and Fitness", "Personal", "Social", "Educational", "Career and Finance"];
 
@@ -33,11 +36,11 @@ const CreateGoal = (bubbleId) => {
 
   function createGoal() {
     console.log("Creating goal!");
-    console.log("hi");
     setLoading(true);
-    const theID = Object.keys(bubbleId).length > 0 ? bubbleId.bubbleId : bubbleIdRef.current.value;
+    const theID = Object.keys(bubbleId).length > 0 ? bubbleId.bubbleId : bubbleIdRef.currentValue;
+    console.log(bubbleIdRef.currentValue);
     bubbleRef
-      .doc(theID)
+      .doc(bubblecat)
       .update({
         goals: firebase.firestore.FieldValue.arrayUnion({
           name: nameRef.current.value,
@@ -49,6 +52,7 @@ const CreateGoal = (bubbleId) => {
       .then(() => {
         console.log("Create goal completed!");
         history.push("/dashboard");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -61,34 +65,43 @@ const CreateGoal = (bubbleId) => {
     createGoal();
   }
 
+  function handleChange(e) {
+    setBubblecat(e.target.value);
+  }
+
   useEffect(() => {
     getBubbles();
   }, []);
 
+  // const handleChange = (event) => {
+  //   setBubbleIdRef(event.target.value);
+  // };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label>
-          Goal Name:
-          <input type="text" ref={nameRef} required></input>
-        </label>
-        <label>
-          * a label for goal type *<input type="text" ref={goalTypeRef} required></input>
-        </label>
-        <label>
-          * a label for goal length *<input type="number" ref={numberRef} required></input>
-        </label>
-        {Object.keys(bubbleId).length === 0 && (
-          <label>
-            * which bubble is this goal linked to? *
-            <select id="category" ref={bubbleIdRef}>
-              {bubbles?.map((c) => {
-                return <option value={c.id}>{c.name}</option>;
-              })}
-            </select>
-          </label>
-        )}
-        <button type="submit">Add Task</button>
+        <div>
+          <TextField style={{ backgroundColor: "white", borderRadius: 10, width: 300, margin: 10 }} label="What is the goal? (ex. Run 30km)" variant="filled" inputRef={nameRef} required />
+        </div>
+        <div>
+          <TextField style={{ backgroundColor: "white", borderRadius: 10, width: 300, margin: 10 }} label="A unit to measure your goal (ex. km)" variant="filled" inputRef={goalTypeRef} required />
+        </div>
+        <div>
+          <TextField style={{ backgroundColor: "white", borderRadius: 10, width: 300, margin: 10 }} label={`How many ${goalTypeRef?.current?.value ? goalTypeRef?.current?.value + "s" : "items"}? (ex.30)`} variant="filled" inputRef={numberRef} required />
+        </div>
+        <div>
+          <TextField onChange={handleChange} style={{ backgroundColor: "white", borderRadius: 10, width: 300, margin: 10 }} label="Which bubble is this goal linked to?" variant="filled" select inputRef={bubbleIdRef} required>
+            <MenuItem value="" disabled>
+              Which bubble is this goal linked to?
+            </MenuItem>
+            {bubbles?.map((c) => {
+              return <MenuItem value={c.id}>{c.name}</MenuItem>;
+            })}
+          </TextField>
+        </div>
+        <Button variant="contained" style={{ backgroundColor: "#4A567C", width: 150, color: "white", margin: 20, borderRadius: 10 }} type="submit">
+          Create!
+        </Button>
       </form>
     </div>
   );

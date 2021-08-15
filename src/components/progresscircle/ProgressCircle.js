@@ -24,7 +24,7 @@ const ProgressCircle = (props) => {
         <circle className="svg-circle-bg" stroke={circleOneStroke} cx={center} cy={center} r={radius} strokeWidth={strokeWidth} />
         <circle className="svg-circle" ref={circleRef} stroke={circleTwoStroke} cx={center} cy={center} r={radius} strokeWidth={strokeWidth} strokeDasharray={circumference} strokeDashoffset={offset} />
         <text x={`${center}`} y={`${center}`} className="svg-circle-text">
-          {progress / total}%
+          {Math.round((progress / total) * 100)}%
         </text>
       </svg>
     </>
