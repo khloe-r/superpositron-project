@@ -18,5 +18,5 @@ We wanted to help break the ‘busier than we think we are’ mindset/mentality 
 * Built in 5 minute timer (with the ability to keep going!) and progress bar for each task
 
 ## Demo
-Visit [here] (https://superpositron-project.web.app/)
+Visit [here](https://superpositron-project.web.app/)
 
